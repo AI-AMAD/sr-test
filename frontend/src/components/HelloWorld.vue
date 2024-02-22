@@ -1,153 +1,161 @@
 <template>
-  <v-container>
-    <v-row class="text-center">
-      <v-col cols="12">
-        <v-img
-          :src="logo"
-          class="my-3"
-          contain
-          height="200"
-        />
-      </v-col>
-
-      <v-col class="mb-4">
-        <h1 class="display-2 font-weight-bold mb-3">
-          Welcome to the Vuetify 3 Beta
-        </h1>
-        <v-btn>버튼</v-btn>
-
-          <h4>Vite Preview</h4>
-
-        <p class="subheading font-weight-regular">
-          For help and collaboration with other Vuetify developers,
-          <br>please join our online
-          <a
-            href="https://community.vuetifyjs.com"
-            target="_blank"
-          >Discord Community</a>
-        </p>
-      </v-col>
-
-      <v-col
-        class="mb-5"
-        cols="12"
+  <v-app id="inspire">
+    <v-main class="blue-grey lighten-4">
+      <!-- SignUp Component -->
+      <v-container
+        style="max-width: 450px"
+        fill-height
       >
-        <h2 class="headline font-weight-bold mb-5">
-          What's next?
-        </h2>
-
-        <v-row justify="center">
-          <a
-            v-for="(next, i) in whatsNext"
-            :key="i"
-            :href="next.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ next.text }}
-          </a>
+        <v-row align="center">
+          <v-col cols="12">
+            <v-card>
+              <div class="pa-10">
+                <h1
+                  style="text-align: center"
+                  class="mb-10"
+                >
+                  SignUp
+                </h1>
+                <v-form ref="form">
+                  <v-text-field
+                    v-model="email"
+                    required
+                    :rules="emailRules"
+                    label="Email"
+                    prepend-inner-icon="mdi-email"
+                  />
+                  <v-text-field
+                    v-model="nickname"
+                    required
+                    prepend-inner-icon="mdi-account"
+                    label="Nickname"
+                    :counter="10"
+                    :rules="nameRules"
+                  />
+                  <v-text-field
+                    v-model="password"
+                    required
+                    prepend-inner-icon="mdi-lock"
+                    type="password"
+                    label="Password"
+                    :rules="passwordRules"
+                  />
+                  <v-text-field
+                    v-model="passwordCheck"
+                    required
+                    prepend-inner-icon="mdi-lock"
+                    type="password"
+                    label="PasswordCheck"
+                    :rules="passwordCheckRules.concat(passwordConfirmationRule)"
+                  />
+                  <v-card-actions>
+                    <v-btn
+                      color="blue lighten-1 text-capitalize"
+                      depressed
+                      large
+                      block
+                      dark
+                      class="mb-3"
+                      @click="signUpSubmit()"
+                    >
+                      signUp
+                    </v-btn>
+                  </v-card-actions>
+                  <v-card-actions>
+                    <v-btn
+                      color="blue lighten-1 text-capitalize"
+                      depressed
+                      large
+                      block
+                      dark
+                      class="mb-3"
+                      @click="linkToLogin()"
+                    >
+                      Login
+                    </v-btn>
+                  </v-card-actions>
+                </v-form>
+              </div>
+            </v-card>
+          </v-col>
         </v-row>
-      </v-col>
-
-      <v-col
-        class="mb-5"
-        cols="12"
-      >
-        <h2 class="headline font-weight-bold mb-5">
-          Important Links
-        </h2>
-
-        <v-row justify="center">
-          <a
-            v-for="(link, i) in importantLinks"
-            :key="i"
-            :href="link.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ link.text }}
-          </a>
-        </v-row>
-      </v-col>
-
-      <v-col
-        class="mb-5"
-        cols="12"
-      >
-        <h2 class="headline font-weight-bold mb-5">
-          Ecosystem
-        </h2>
-
-        <v-row justify="center">
-          <a
-            v-for="(eco, i) in ecosystem"
-            :key="i"
-            :href="eco.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ eco.text }}
-          </a>
-        </v-row>
-      </v-col>
-    </v-row>
-  </v-container>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import logo from '../assets/logo.svg'
-
 export default {
-  name: 'HelloWorld',
+    data: () => ({
+        email : "",
+        emailRules: [
+          v => !!v || '이메일을 작성해주세요',
+          v => /.+@.+\..+/.test(v) || '이메일 형식으로 작성해주세요',
+      ],
+        password : "",
+        passwordRules: [
+          v => !!v || '비밀번호을 작성해주세요',
+          v => (v && v.length >= 5) || '비밀번호는 5글자 이상 작성해주세요',
+          v => /(?=.*\d)/.test(v) || '숫자를 포함해야합니다',
+          v => /([!@$%])/.test(v) || '특수문자를 포함해야합니다 [!@#$%]'
+      ],
+        passwordCheck : "",
+        passwordCheckRules: [
+          v => !!v || '비밀번호을 작성해주세요',
+          v => (v && v.length >= 5) || '비밀번호는 5글자 이상 작성해주세요',
+          v => /(?=.*\d)/.test(v) || '숫자를 포함해야합니다',
+          v => /([!@$%])/.test(v) || '특수문자를 포함해야합니다 [!@#$%]',
 
-  data: () => ({
-    ecosystem: [
-      {
-        text: 'vuetify-loader',
-        href: 'https://github.com/vuetifyjs/vuetify-loader/tree/next',
-      },
-      {
-        text: 'github',
-        href: 'https://github.com/vuetifyjs/vuetify/tree/next',
-      },
-      {
-        text: 'awesome-vuetify',
-        href: 'https://github.com/vuetifyjs/awesome-vuetify',
-      },
-    ],
-    importantLinks: [
-      {
-        text: 'Chat',
-        href: 'https://community.vuetifyjs.com',
-      },
-      {
-        text: 'Made with Vuetify',
-        href: 'https://madewithvuejs.com/vuetify',
-      },
-      {
-        text: 'Twitter',
-        href: 'https://twitter.com/vuetifyjs',
-      },
-      {
-        text: 'Articles',
-        href: 'https://medium.com/vuetify',
-      },
-    ],
-    logo,
-    whatsNext: [
-      {
-        text: 'Explore components',
-        href: 'https://vuetifyjs.com',
-      },
-      {
-        text: 'Roadmap',
-        href: 'https://vuetifyjs.com/introduction/roadmap/',
-      },
-      {
-        text: 'Frequently Asked Questions',
-        href: 'https://vuetifyjs.com/getting-started/frequently-asked-questions',
-      },
-    ],
-  }),
+        ],
+        nickname : "",
+        nameRules: [
+          v => !!v || '닉네임을 작성해주세요',
+          v => (v && v.length <= 10) || '닉네임을 10글자를 넘을 수 없습니다.',
+      ],
+    }),
+    computed:{
+      passwordConfirmationRule() {
+      return () =>
+        this.password !== this.confirmPassword || "패스워드가 일치하지 않습니다";
+    }
+    },
+    methods: {
+        signUpSubmit(){
+          const validate = this.$refs.form.validate()
+          if(validate){
+          let saveData = {};
+          saveData.email = this.email;
+          saveData.password = this.password;
+          saveData.nickname = this.nickname;
+
+          try {
+             this.$axios.post("/api/member", JSON.stringify(saveData), {
+               headers: {
+                 "Content-Type": `application/json`,
+                  },
+                  })
+                  .then((response) => {
+                    console.log(response)
+                    if (response.data.errorCode === 400) {
+                      alert(response.data.errorMessage)
+
+                      }
+                      else{
+                        alert("회원가입이 완료되었습니다. 로그인 화면으로 돌아갑니다")
+                        this.$router.push({path: './login'});
+                      }
+                      })
+            .catch(error =>{
+              console.log(error.response);
+
+            });
+      } catch (error) {
+        console.error(error);
+      }
+        }},
+        linkToLogin(){
+          this.$router.push({path:"./login"});
+        }
+    }
 }
 </script>
